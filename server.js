@@ -12,12 +12,22 @@ function copyHeaders(req) {
   const h = {};
   for (const [k, v] of Object.entries(req.headers)) {
     const lk = k.toLowerCase();
+
+    // Strip incoming Authorization entirely
+    if (lk === "authorization") continue;
+
     if (["host", "content-length", "connection", "accept-encoding"].includes(lk)) continue;
     h[k] = v;
   }
-  if (AUTH) h["Authorization"] = AUTH;
+
+  // Always use shim's own credentials to talk to SQL-LRS
+  if (AUTH) {
+    h["Authorization"] = AUTH;
+  }
+
   return h;
 }
+
 
 async function forward(method, url, headers, body) {
   const options = { method, headers };
