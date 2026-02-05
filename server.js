@@ -20,10 +20,18 @@ function copyHeaders(req) {
 }
 
 async function forward(method, url, headers, body) {
-  const r = await fetch(url, { method, headers, body });
+  const options = { method, headers };
+
+  // Only attach body for methods that allow it
+  if (!["GET", "HEAD"].includes(method)) {
+    options.body = body;
+  }
+
+  const r = await fetch(url, options);
   const buf = Buffer.from(await r.arrayBuffer());
   return { r, buf };
 }
+
 
 app.all("/xapi/*", async (req, res) => {
   const targetUrl = `${TARGET}${req.originalUrl}`;
