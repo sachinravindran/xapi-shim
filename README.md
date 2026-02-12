@@ -159,5 +159,5 @@ MIT
 
 ## **Author**
 Sachin Ravindran
-https://theinfiniteloop.com
+https://theinfiniteloop.in
 https://github.com/sachinravindran
